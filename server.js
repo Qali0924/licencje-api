@@ -102,7 +102,35 @@ app.get('/api/user', async (req, res) => {
         res.status(401).json({ message: 'Niezalogowany' });
     }
 });
+// --- API: ZARZĄDZANIE KATEGORIAMI ---
 
+// Pobieranie kategorii
+app.get('/api/categories', isLoggedIn, async (req, res) => {
+    const { data, error } = await supabase
+        .from('categories')
+        .select('*')
+        .eq('owner_id', req.user.id)
+        .order('created_at', { ascending: true });
+
+    if (error) return res.status(500).json({ error: error.message });
+    res.json(data);
+});
+
+// Tworzenie nowej kategorii
+app.post('/api/categories', isLoggedIn, async (req, res) => {
+    const { name, description } = req.body;
+    
+    if (!name) return res.status(400).json({ error: 'Nazwa kategorii jest wymagana.' });
+
+    const { data, error } = await supabase.from('categories').insert([{
+        owner_id: req.user.id,
+        name: name,
+        description: description || null
+    }]).select().single();
+
+    if (error) return res.status(500).json({ error: error.message });
+    res.status(201).json(data);
+});
 // --- API: ZARZĄDZANIE LICENCJAMI ---
 
 // Pobieranie listy
