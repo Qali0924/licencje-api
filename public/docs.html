@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html class="dark" lang="pl">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Dokumentacja API - Synthesized Studio</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "primary-container": "#5865f2",
+                "background": "#121316",
+                "surface": "#121316",
+                "secondary": "#4ae183",
+                "surface-container-low": "#1a1b1e",
+                "surface-container-highest": "#343538",
+                "surface-container": "#1f1f23"
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .neon-glow { background: radial-gradient(circle at 100% 0%, rgba(88, 101, 242, 0.1) 0%, transparent 40%); }
+        pre { scrollbar-width: thin; scrollbar-color: #343538 transparent; }
+        code { font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+    </style>
+</head>
+<body class="bg-surface font-body text-zinc-400 min-h-screen relative overflow-x-hidden">
+
+    <div class="absolute inset-0 neon-glow pointer-events-none"></div>
+
+    <header class="border-b border-white/5 bg-surface/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-primary-container text-3xl">terminal</span>
+                <div class="text-xl font-black italic tracking-tighter text-white uppercase">
+                    Synthesized <span class="text-primary-container">Docs</span>
+                </div>
+            </div>
+            <a href="/" class="flex items-center gap-2 bg-white/5 hover:bg-white/10 text-white px-5 py-2.5 rounded-xl font-bold text-xs transition-all border border-white/5">
+                <span class="material-symbols-outlined text-sm">arrow_back</span> POWRÓT DO PANELU
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-12 relative z-10">
+        
+        <div class="mb-16">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="bg-primary-container/20 text-primary-container text-[10px] font-black px-2 py-1 rounded border border-primary-container/30 uppercase tracking-widest">Dokumentacja V2</span>
+                <span class="h-px flex-1 bg-gradient-to-r from-white/10 to-transparent"></span>
+            </div>
+            <h1 class="text-5xl font-black text-white tracking-tight uppercase mb-4">
+                Integracja <span class="text-primary-container">API</span>
+            </h1>
+            <p class="text-zinc-500 text-lg max-w-2xl">
+                Dowiedz się, jak w kilku prostych krokach zabezpieczyć swój plugin Minecraft korzystając z systemu <b>CLOUD MATH</b>.
+            </p>
+        </div>
+
+        <div class="grid gap-12">
+            
+            <section class="space-y-4">
+                <div class="flex items-center gap-4 text-white">
+                    <span class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center font-bold text-sm">1</span>
+                    <h2 class="text-2xl font-bold uppercase tracking-tight">Wprowadzenie</h2>
+                </div>
+                <div class="bg-surface-container-low border border-white/5 p-6 rounded-2xl leading-relaxed">
+                    Plugin przy starcie serwera wysyła zapytanie typu <b>POST</b> do naszego systemu. Jeśli klucz jest poprawny, a limit IP nie został przekroczony, API zwraca status pozytywny. W przypadku braku licencji, zalecane jest wyłączenie pluginu (<i>disablePlugin</i>).
+                </div>
+            </section>
+
+            <section class="space-y-4">
+                <div class="flex items-center gap-4 text-white">
+                    <span class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center font-bold text-sm">2</span>
+                    <h2 class="text-2xl font-bold uppercase tracking-tight">Endpoint API</h2>
+                </div>
+                <div class="bg-surface-container-low border border-white/5 rounded-2xl overflow-hidden">
+                    <div class="p-6 space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="bg-black/20 p-4 rounded-xl border border-white/5">
+                                <p class="text-[10px] font-black text-zinc-600 uppercase mb-1">Metoda</p>
+                                <p class="text-secondary font-bold text-sm">POST</p>
+                            </div>
+                            <div class="bg-black/20 p-4 rounded-xl border border-white/5 md:col-span-2">
+                                <p class="text-[10px] font-black text-zinc-600 uppercase mb-1">URL Walidacji</p>
+                                <p class="text-white font-mono text-sm break-all">https://twoja-domena.pl/api/validate</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-black/40 border-t border-white/5 p-6">
+                        <p class="text-[10px] font-black text-zinc-600 uppercase mb-4 tracking-widest">Przykład zapytania (JSON)</p>
+                        <pre class="text-sm text-primary leading-6"><code>{
+  <span class="text-white">"key"</span>: "TWÓJ_KLUCZ_LICENCYJNY",
+  <span class="text-white">"ip"</span>: "IP_SERWERA_MINECRAFT"
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section class="space-y-6">
+                <div class="flex items-center gap-4 text-white">
+                    <span class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center font-bold text-sm">3</span>
+                    <h2 class="text-2xl font-bold uppercase tracking-tight">Implementacja Java</h2>
+                </div>
+
+                <div class="space-y-4">
+                    <h4 class="text-sm font-bold text-zinc-300 uppercase tracking-widest flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span> Krok A: Zależność Maven
+                    </h4>
+                    <div class="bg-surface-container-low border border-white/5 rounded-2xl p-6 bg-black/30">
+                        <pre class="text-sm text-zinc-500 overflow-x-auto"><code><span class="text-primary-container">&lt;dependency&gt;</span>
+    <span class="text-primary-container">&lt;groupId&gt;</span>com.google.code.gson<span class="text-primary-container">&lt;/groupId&gt;</span>
+    <span class="text-primary-container">&lt;artifactId&gt;</span>gson<span class="text-primary-container">&lt;/artifactId&gt;</span>
+    <span class="text-primary-container">&lt;version&gt;</span>2.10.1<span class="text-primary-container">&lt;/version&gt;</span>
+<span class="text-primary-container">&lt;/dependency&gt;</span></code></pre>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h4 class="text-sm font-bold text-zinc-300 uppercase tracking-widest flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span> Krok B: Klasa LicenseChecker.java
+                    </h4>
+                    <div class="bg-surface-container-low border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
+                        <div class="bg-white/5 px-6 py-3 border-b border-white/5 flex items-center justify-between">
+                            <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Java Source</span>
+                            <div class="flex gap-1.5">
+                                <div class="w-2.5 h-2.5 rounded-full bg-white/10"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-white/10"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-white/10"></div>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-black/40 overflow-x-auto">
+                            <pre class="text-sm leading-7 text-zinc-300"><code><span class="text-primary">public class</span> LicenseChecker {
+    <span class="text-zinc-500">// Zmień na adres swojej instancji</span>
+    <span class="text-primary">private static final String</span> URL = <span class="text-secondary">"https://twoja-domena.pl/api/validate"</span>;
+
+    <span class="text-primary">public void</span> validate(String key) {
+        <span class="text-primary">new</span> Thread(() -> {
+            <span class="text-zinc-500">// Logika wysyłania POST (HttpURLConnection)
+            // Jeśli response.valid == false -> Bukkit.getPluginManager().disablePlugin(plugin);</span>
+            Bukkit.getLogger().info(<span class="text-secondary">"Oczekiwanie na walidację..."</span>);
+        }).start();
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="space-y-4">
+                <div class="flex items-center gap-4 text-white">
+                    <span class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center font-bold text-sm">4</span>
+                    <h2 class="text-2xl font-bold uppercase tracking-tight">Konfiguracja Pluginu</h2>
+                </div>
+                <div class="bg-surface-container-low border border-white/5 p-6 rounded-2xl space-y-4">
+                    <p class="text-sm leading-relaxed">Dodaj poniższe pola do swojego pliku <code class="text-white">config.yml</code>, aby użytkownik mógł łatwo wprowadzić swój klucz.</p>
+                    <div class="bg-black/40 p-6 rounded-xl border border-white/5">
+                        <pre class="text-sm text-secondary"><code><span class="text-zinc-600"># Synthesized Studio License Key</span>
+<span class="text-primary">license-key</span>: <span class="text-white">"WPROWADZ_TUTAJ_SWOJ_KLUCZ"</span></code></pre>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <footer class="mt-20 pt-10 border-t border-white/5 text-center">
+            <p class="text-[10px] font-black text-zinc-600 uppercase tracking-[0.3em]">
+                © 2026 Synthesized Studio
+            </p>
+        </footer>
+    </main>
+
+</body>
+</html>

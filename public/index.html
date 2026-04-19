@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html class="dark" lang="pl">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Synthesized Studio - Zarządzanie Licencjami</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "secondary-container": "#06bb63",
+                "surface-container-low": "#1a1b1e",
+                "primary": "#bec2ff",
+                "primary-container": "#5865f2",
+                "background": "#121316",
+                "surface": "#121316",
+                "secondary": "#4ae183",
+                "surface-container-highest": "#343538",
+                "surface-container": "#1f1f23"
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .neon-glow { background: radial-gradient(circle at 0% 0%, rgba(88, 101, 242, 0.15) 0%, transparent 50%); }
+        .hidden { display: none !important; }
+        .copy-icon { cursor: pointer; transition: opacity 0.2s; }
+        .copy-icon:hover { opacity: 0.7; }
+    </style>
+</head>
+<body class="bg-surface font-body text-zinc-300 min-h-screen relative overflow-x-hidden">
+
+    <div class="absolute inset-0 neon-glow pointer-events-none"></div>
+
+    <header class="border-b border-white/5 bg-surface/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-primary-container text-3xl">terminal</span>
+                <div class="text-xl font-black italic tracking-tighter text-white uppercase">
+                    Synthesized <span class="text-primary-container">Studio</span>
+                </div>
+            </div>
+            <div id="auth-container"></div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-12 relative z-10">
+        
+        <div id="login-prompt" class="flex flex-col items-center justify-center py-20">
+            <div class="bg-surface-container-low p-10 rounded-3xl border border-white/5 shadow-2xl max-w-md w-full text-center space-y-8">
+                <div class="space-y-2">
+                    <h1 class="text-2xl font-bold text-white">Zaloguj się, aby kontynuować</h1>
+                    <p class="text-zinc-500 text-sm">Użyj swojego konta Discord do zarządzania licencjami.</p>
+                </div>
+                <a href="/auth/discord" class="flex items-center justify-center gap-3 w-full py-4 bg-[#5865F2] hover:bg-[#4752C4] transition-all rounded-xl text-white font-bold">
+                    <i class="bi bi-discord"></i> Zaloguj się przez Discord
+                </a>
+            </div>
+        </div>
+
+        <div id="app-content" class="hidden space-y-10">
+            
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div>
+                    <h1 class="text-4xl font-black text-white tracking-tight uppercase">
+                        System Licencji <span class="bg-primary-container/20 text-primary-container text-[10px] align-middle px-2 py-1 rounded border border-primary-container/30 ml-2">V2 BETA</span>
+                    </h1>
+                    <p class="text-zinc-500 mt-2">Zarządzaj swoimi kluczami i zabezpiecz swoje pluginy.</p>
+                </div>
+                <div class="flex flex-wrap gap-4">
+                    <a href="docs.html" class="flex items-center gap-2 px-4 py-2 text-xs font-bold text-zinc-400 hover:text-white transition-colors">
+                        <i class="bi bi-file-earmark-text"></i> DOKUMENTACJA API
+                    </a>
+                    <a href="#" class="flex items-center gap-2 px-4 py-2 text-xs font-bold text-zinc-400 hover:text-white transition-colors">
+                        <i class="bi bi-plus-circle"></i> KUP 10 SLOTÓW
+                    </a>
+                    <button class="bg-primary-container hover:bg-opacity-90 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition-transform active:scale-95 shadow-lg shadow-primary-container/20" id="add-license-btn">
+                        <i class="bi bi-plus"></i> DODAJ LICENCJĘ
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-surface-container-low border border-white/5 p-6 rounded-2xl space-y-4">
+                    <div class="text-zinc-500 text-[10px] font-bold uppercase tracking-widest">ADMIN KEY (SECRET)</div>
+                    <div class="flex items-center justify-between bg-black/20 p-3 rounded-lg border border-white/5">
+                        <span id="admin-key" class="text-primary text-sm truncate">dane-ladowanie...</span>
+                        <i class="bi bi-clipboard copy-icon ml-2" data-copy-target="#admin-key"></i>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-low border border-white/5 p-6 rounded-2xl space-y-4">
+                    <div class="text-zinc-500 text-[10px] font-bold uppercase tracking-widest">VERIFICATION KEY (PUBLIC)</div>
+                    <div class="flex items-center justify-between bg-black/20 p-3 rounded-lg border border-white/5">
+                        <span id="public-key" class="text-zinc-300 text-sm truncate">cmndp98jk0003vsn809y2o</span>
+                        <i class="bi bi-clipboard copy-icon ml-2" data-copy-target="#public-key"></i>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-low border border-white/5 p-6 rounded-2xl space-y-4">
+                    <div class="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-zinc-500">
+                        <span>Wszystkie Sloty</span>
+                        <span class="text-white slots-count">1 / 20</span>
+                    </div>
+                    <div class="w-full bg-white/5 h-2 rounded-full overflow-hidden">
+                        <div class="progress bg-secondary h-full" style="width: 5%"></div>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-low border border-white/5 p-6 rounded-2xl flex items-center justify-between">
+                    <div class="space-y-1">
+                        <div class="text-zinc-500 text-[10px] font-bold uppercase tracking-widest">STATUS</div>
+                        <div class="flex items-center gap-2">
+                            <span class="status-badge active text-secondary text-xs font-bold uppercase">Aktywna</span>
+                        </div>
+                        <div class="text-[10px] text-zinc-600">WYGASA: 13.05.2028</div>
+                    </div>
+                    <button class="bg-white/5 hover:bg-white/10 text-white px-4 py-2 rounded-lg text-[10px] font-bold transition-colors">PRZEDŁUŻ</button>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <h2 class="text-xl font-bold text-white flex items-center gap-3">
+                    <i class="bi bi-shield-check text-primary-container"></i> SYSTEM LICENCJI
+                </h2>
+                <div id="license-list" class="grid gap-4"></div>
+            </div>
+        </div>
+    </main>
+
+    <div id="modal-overlay" class="fixed inset-0 bg-background/90 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-6">
+        <div class="bg-surface-container-low border border-white/10 w-full max-w-lg rounded-3xl shadow-2xl relative overflow-hidden">
+            <div class="p-8 space-y-6">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h2 class="text-2xl font-black text-white uppercase">DODAJ LICENCJĘ</h2>
+                        <p class="text-zinc-500 text-sm">Uzupełnij dane, aby wygenerować nowy klucz.</p>
+                    </div>
+                    <button id="modal-close-btn" class="text-zinc-500 hover:text-white text-3xl">&times;</button>
+                </div>
+
+                <form id="license-form" class="space-y-5">
+                    <div class="space-y-2">
+                        <label for="pluginName" class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 ml-1">Nazwa Pluginu</label>
+                        <input type="text" id="pluginName" placeholder="np. DH-Core" required class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-primary-container/50">
+                    </div>
+                    <div class="space-y-2">
+                        <label for="discordId" class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 ml-1">ID Discord (Opcjonalne)</label>
+                        <input type="text" id="discordId" placeholder="np. 123456789" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-primary-container/50">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label for="ipLimit" class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 ml-1">Limit IP</label>
+                            <input type="number" id="ipLimit" value="1" min="1" required class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-primary-container/50">
+                        </div>
+                        <div class="space-y-2">
+                            <label for="validityDays" class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 ml-1">Dni ważności</label>
+                            <input type="number" id="validityDays" placeholder="Wieczysta" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-primary-container/50">
+                        </div>
+                    </div>
+                    <div class="flex gap-4 pt-4">
+                        <button type="button" id="modal-cancel-btn" class="flex-1 py-4 text-zinc-400 font-bold hover:text-white transition-colors uppercase text-xs tracking-widest">Anuluj</button>
+                        <button type="submit" class="flex-[2] bg-primary-container hover:bg-opacity-90 text-white py-4 rounded-xl font-bold shadow-lg shadow-primary-container/20 transition-transform active:scale-95 uppercase text-xs tracking-widest">Dodaj Licencję</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<div id="log-overlay" class="fixed inset-0 bg-background/95 backdrop-blur-md z-[110] flex items-center justify-center hidden p-6">
+    <div class="bg-surface-container-low border border-white/10 w-full max-w-xl rounded-3xl shadow-2xl overflow-hidden">
+        <div class="p-8">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-primary-container/10 flex items-center justify-center text-primary-container">
+                        <i class="bi bi-clock-history text-2xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-black text-white uppercase tracking-tight">Logi Aktywności</h2>
+                        <p class="text-zinc-500 text-xs">Historia weryfikacji dla tego pluginu</p>
+                    </div>
+                </div>
+                <button onclick="document.getElementById('log-overlay').classList.add('hidden')" class="text-zinc-500 hover:text-white text-3xl">&times;</button>
+            </div>
+            
+            <div id="log-list" class="space-y-3 max-h-[400px] overflow-y-auto pr-2">
+                <div class="bg-white/5 p-4 rounded-xl flex items-center justify-between border border-white/5">
+                    <div class="flex items-center gap-3">
+                        <span class="px-2 py-1 bg-green-500/20 text-green-500 text-[10px] font-bold rounded">VERIFY OK</span>
+                        <span class="text-zinc-400 text-xs">15.04.2026, 21:04:58</span>
+                    </div>
+                    <span class="text-zinc-500 font-mono text-xs"><i class="bi bi-globe"></i> 127.0.0.1</span>
+                </div>
+            </div>
+            
+            <button onclick="document.getElementById('log-overlay').classList.add('hidden')" class="w-full mt-6 py-4 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl transition-all uppercase text-xs tracking-widest">Zamknij</button>
+        </div>
+    </div>
+</div>
+
+<div id="toast-container" class="fixed bottom-10 right-10 z-[200] space-y-4"></div>
+    <script src="script.js"></script>
+</body>
+</html>
