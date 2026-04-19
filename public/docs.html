@@ -5,9 +5,8 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Dokumentacja API - Synthesized Studio</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     
     <script id="tailwind-config">
       tailwind.config = {
@@ -28,7 +27,11 @@
       }
     </script>
     <style>
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        /* Standaryzacja ikon */
+        .material-icons-outlined {
+            vertical-align: middle;
+            line-height: 1;
+        }
         .neon-glow { background: radial-gradient(circle at 100% 0%, rgba(88, 101, 242, 0.1) 0%, transparent 40%); }
         pre { scrollbar-width: thin; scrollbar-color: #343538 transparent; }
         code { font-family: 'JetBrains Mono', 'Fira Code', monospace; }
@@ -41,13 +44,13 @@
     <header class="border-b border-white/5 bg-surface/80 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <span class="material-symbols-outlined text-primary-container text-3xl">terminal</span>
+                <span class="material-icons-outlined text-primary-container text-3xl">terminal</span>
                 <div class="text-xl font-black italic tracking-tighter text-white uppercase">
                     Synthesized <span class="text-primary-container">Studio</span>
                 </div>
             </div>
             <a href="/" class="flex items-center gap-2 bg-white/5 hover:bg-white/10 text-white px-5 py-2.5 rounded-xl font-bold text-xs transition-all border border-white/5">
-                <span class="material-symbols-outlined text-sm">arrow_back</span> POWRÓT DO PANELU
+                <span class="material-icons-outlined text-sm">arrow_back</span> POWRÓT DO PANELU
             </a>
         </div>
     </header>
@@ -128,49 +131,27 @@
 
                 <div class="space-y-4">
                     <h4 class="text-sm font-bold text-zinc-300 uppercase tracking-widest flex items-center gap-2">
-                        <span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span> Krok B: Klasa LicenseChecker.java
+                        <span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span> Krok B: Przykładowy Kod
                     </h4>
                     <div class="bg-surface-container-low border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
                         <div class="bg-white/5 px-6 py-3 border-b border-white/5 flex items-center justify-between">
-                            <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Java Source</span>
+                            <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">LicenseManager.java</span>
                             <div class="flex gap-1.5">
-                                <div class="w-2.5 h-2.5 rounded-full bg-white/10"></div>
-                                <div class="w-2.5 h-2.5 rounded-full bg-white/10"></div>
-                                <div class="w-2.5 h-2.5 rounded-full bg-white/10"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-red-500/20"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/20"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-green-500/20"></div>
                             </div>
                         </div>
                         <div class="p-6 bg-black/40 overflow-x-auto">
-                            <pre class="text-sm leading-7 text-zinc-300"><code><span class="text-primary">public class</span> LicenseChecker {
-    <span class="text-zinc-500">// Adres Twojej instancji API</span>
-    <span class="text-primary">private static final String</span> URL = <span class="text-secondary">"https://licencje-api-u0sq.onrender.com/api/validate"</span>;
-
-    <span class="text-primary">public void</span> validate(String key) {
-        <span class="text-primary">new</span> Thread(() -> {
-            <span class="text-zinc-500">// Logika wysyłania POST (HttpURLConnection)
-            // Jeśli response.valid == false -> Bukkit.getPluginManager().disablePlugin(plugin);</span>
-            Bukkit.getLogger().info(<span class="text-secondary">"Oczekiwanie na walidację..."</span>);
-        }).start();
-    }
+                            <pre class="text-sm leading-7 text-zinc-300"><code><span class="text-primary">public static void</span> check(JavaPlugin plugin) {
+    String key = plugin.getConfig().getString(<span class="text-secondary">"license-key"</span>);
+    <span class="text-zinc-500">// Endpoint: https://licencje-api-u0sq.onrender.com/api/validate</span>
+    Bukkit.getLogger().info(<span class="text-secondary">"[SYNTHESIZED] Weryfikacja..."</span>);
 }</code></pre>
                         </div>
                     </div>
                 </div>
             </section>
-
-            <section class="space-y-4">
-                <div class="flex items-center gap-4 text-white">
-                    <span class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center font-bold text-sm">4</span>
-                    <h2 class="text-2xl font-bold uppercase tracking-tight">Konfiguracja Pluginu</h2>
-                </div>
-                <div class="bg-surface-container-low border border-white/5 p-6 rounded-2xl space-y-4">
-                    <p class="text-sm leading-relaxed">Dodaj poniższe pola do swojego pliku <code class="text-white">config.yml</code>, aby użytkownik mógł łatwo wprowadzić swój klucz.</p>
-                    <div class="bg-black/40 p-6 rounded-xl border border-white/5">
-                        <pre class="text-sm text-secondary"><code><span class="text-zinc-600"># Synthesized Studio License Key</span>
-<span class="text-primary">license-key</span>: <span class="text-white">"WPROWADZ_TUTAJ_SWOJ_KLUCZ"</span></code></pre>
-                    </div>
-                </div>
-            </section>
-
         </div>
 
         <footer class="mt-20 pt-10 border-t border-white/5 text-center">
