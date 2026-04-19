@@ -6,6 +6,7 @@
     <title>Dokumentacja API - Synthesized Studio</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     
     <script id="tailwind-config">
@@ -13,11 +14,16 @@
         darkMode: "class",
         theme: {
           extend: {
+            fontFamily: {
+              'body': ['Inter', 'sans-serif'],
+              'mono': ['JetBrains Mono', 'monospace'],
+            },
             "colors": {
                 "primary-container": "#5865f2",
                 "background": "#121316",
                 "surface": "#121316",
                 "secondary": "#4ae183",
+                "danger": "#f25858",
                 "surface-container-low": "#1a1b1e",
                 "surface-container-highest": "#343538",
                 "surface-container": "#1f1f23"
@@ -28,7 +34,7 @@
     </script>
     <style>
         .material-icons-outlined { vertical-align: middle; line-height: 1; }
-        .neon-glow { background: radial-gradient(circle at 100% 0%, rgba(88, 101, 242, 0.1) 0%, transparent 40%); }
+        .neon-glow { background: radial-gradient(circle at 100% 0%, rgba(88, 101, 242, 0.15) 0%, transparent 45%); }
         pre { scrollbar-width: thin; scrollbar-color: #343538 transparent; overflow-x: auto; }
         code { font-family: 'JetBrains Mono', 'Fira Code', monospace; }
         .bg-grid { background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 0); background-size: 40px 40px; }
@@ -52,7 +58,7 @@
         </div>
     </header>
 
-    <main class="max-w-5xl mx-auto px-6 py-12 relative z-10">
+    <main class="max-w-5xl mx-auto px-6 py-12 lg:py-20 relative z-10">
         
         <div class="mb-16 text-center md:text-left">
             <div class="flex items-center justify-center md:justify-start gap-3 mb-4">
@@ -62,109 +68,279 @@
             <h1 class="text-4xl md:text-6xl font-black text-white tracking-tight uppercase mb-4">
                 Integracja <span class="text-primary-container">API</span>
             </h1>
-            <p class="text-zinc-500 text-lg max-w-2xl">
+            <p class="text-zinc-500 text-lg max-w-2xl mx-auto md:mx-0">
                 Zabezpiecz swój projekt w kilka minut korzystając z globalnej infrastruktury <b>Synthesized Studio</b>.
             </p>
         </div>
 
-        <div class="grid gap-12">
+        <div class="grid gap-16">
             
-            <section class="space-y-4">
+            <section class="space-y-6">
                 <div class="flex items-center gap-4 text-white">
-                    <span class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center font-bold text-sm">1</span>
+                    <span class="w-8 h-8 rounded-lg bg-primary-container flex-shrink-0 flex items-center justify-center font-bold text-sm">1</span>
                     <h2 class="text-2xl font-bold uppercase tracking-tight">Wprowadzenie</h2>
                 </div>
                 <div class="bg-surface-container-low border border-white/5 p-6 rounded-2xl leading-relaxed">
-                    System walidacji opiera się na żądaniach HTTP. Plugin przesyła klucz oraz IP serwera, a nasze API weryfikuje dane w czasie rzeczywistym. W przypadku braku aktywnej licencji, zalecamy natychmiastowe zatrzymanie logiki pluginu.
-                </div>
-            </section>
-
-            <section class="space-y-4">
-                <div class="flex items-center gap-4 text-white">
-                    <span class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center font-bold text-sm">2</span>
-                    <h2 class="text-2xl font-bold uppercase tracking-tight">Endpoint Walidacji</h2>
-                </div>
-                <div class="bg-surface-container-low border border-white/5 rounded-2xl overflow-hidden">
-                    <div class="p-6 space-y-4">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div class="bg-black/20 p-4 rounded-xl border border-white/5">
-                                <p class="text-[10px] font-black text-zinc-600 uppercase mb-1">Metoda HTTP</p>
-                                <p class="text-secondary font-bold text-sm">POST</p>
-                            </div>
-                            <div class="bg-black/20 p-4 rounded-xl border border-white/5 md:col-span-2">
-                                <p class="text-[10px] font-black text-zinc-600 uppercase mb-1">Endpoint URL</p>
-                                <p class="text-white font-mono text-sm break-all">https://licencje-api-u0sq.onrender.com/api/validate</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-black/40 border-t border-white/5 p-6">
-                        <p class="text-[10px] font-black text-zinc-600 uppercase mb-4 tracking-widest">Struktura JSON (Request)</p>
-                        <pre class="text-sm text-primary leading-6"><code>{
-  <span class="text-white">"key"</span>: "TWOJ-KLUCZ-LICENCYJNY",
-  <span class="text-white">"ip"</span>: "AUTO"
-}</code></pre>
-                    </div>
+                    System walidacji opiera się na żądaniach HTTP. Twój plugin wysyła klucz licencyjny do naszego API, które weryfikuje jego poprawność w czasie rzeczywistym. W przypadku braku aktywnej licencji, zalecamy natychmiastowe zatrzymanie logiki pluginu, aby zabezpieczyć swoją pracę.
                 </div>
             </section>
 
             <section class="space-y-6">
                 <div class="flex items-center gap-4 text-white">
-                    <span class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center font-bold text-sm">3</span>
-                    <h2 class="text-2xl font-bold uppercase tracking-tight">Implementacja Java (Bukkit/Spigot)</h2>
+                    <span class="w-8 h-8 rounded-lg bg-primary-container flex-shrink-0 flex items-center justify-center font-bold text-sm">2</span>
+                    <h2 class="text-2xl font-bold uppercase tracking-tight">Endpoint Walidacji</h2>
                 </div>
-
-                <div class="space-y-4">
-                    <h4 class="text-sm font-bold text-zinc-300 uppercase tracking-widest flex items-center gap-2">
-                        <span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span> Zależność GSON (pom.xml)
-                    </h4>
-                    <div class="bg-surface-container-low border border-white/5 rounded-2xl p-6 bg-black/30">
-                        <pre class="text-sm text-zinc-500"><code>&lt;dependency&gt;
-    &lt;groupId&gt;com.google.code.gson&lt;/groupId&gt;
-    &lt;artifactId&gt;gson&lt;/artifactId&gt;
-    &lt;version&gt;2.10.1&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
-                    </div>
-                </div>
-
-                <div class="space-y-4">
-                    <h4 class="text-sm font-bold text-zinc-300 uppercase tracking-widest flex items-center gap-2">
-                        <span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span> Przykładowa klasa LicenseManager.java
-                    </h4>
-                    <div class="bg-surface-container-low border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
-                        <div class="bg-white/5 px-6 py-3 border-b border-white/5 flex items-center justify-between">
-                            <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Java 17+ Code</span>
-                            <div class="flex gap-1.5">
-                                <div class="w-2.5 h-2.5 rounded-full bg-red-500/40"></div>
-                                <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/40"></div>
-                                <div class="w-2.5 h-2.5 rounded-full bg-green-500/40"></div>
-                            </div>
+                <div class="bg-surface-container-low border border-white/5 rounded-2xl p-6 space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-black/20 p-4 rounded-xl border border-white/5">
+                            <p class="text-[10px] font-black text-zinc-600 uppercase mb-1">Metoda HTTP</p>
+                            <p class="text-secondary font-bold text-sm">POST</p>
                         </div>
-                        <div class="p-6 bg-black/40 overflow-x-auto">
-                            <pre class="text-sm leading-7 text-zinc-300"><code><span class="text-primary">public class</span> LicenseManager {
-    <span class="text-primary">private static final String</span> API_URL = <span class="text-secondary">"https://licencje-api-u0sq.onrender.com/api/validate"</span>;
+                        <div class="bg-black/20 p-4 rounded-xl border border-white/5 md:col-span-2">
+                            <p class="text-[10px] font-black text-zinc-600 uppercase mb-1">Endpoint URL</p>
+                            <p class="text-white font-mono text-sm break-all">https://licencje-api-u0sq.onrender.com/api/validate</p>
+                        </div>
+                    </div>
+                     <div class="bg-black/20 p-4 rounded-xl border border-white/5">
+                        <p class="text-[10px] font-black text-zinc-600 uppercase mb-1">Nagłówek (Headers)</p>
+                        <p class="text-white font-mono text-sm">Content-Type: application/json</p>
+                    </div>
 
-    <span class="text-primary">public static void</span> check(JavaPlugin plugin) {
-        String key = plugin.getConfig().getString(<span class="text-secondary">"license-key"</span>);
-        <span class="text-zinc-500">// Wyślij żądanie POST i sprawdź odpowiedź JSON:
-        // { "valid": true/false }</span>
-        Bukkit.getLogger().info(<span class="text-secondary">"[SYNTHESIZED] Trwa weryfikacja licencji..."</span>);
-    }
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
+                        <div class="space-y-4">
+                            <h3 class="text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2">
+                                <span class="material-icons-outlined text-base text-primary-container">arrow_forward</span> Ciało Żądania (Request)
+                            </h3>
+                             <div class="bg-black/40 border border-white/5 rounded-xl overflow-hidden">
+                                <pre class="text-sm p-6"><code>{
+  <span class="text-white">"key"</span>: <span class="text-secondary">"TWOJ-KLUCZ-LICENCYJNY"</span>,
+  <span class="text-white">"ip"</span>: <span class="text-secondary">"AUTO"</span>
 }</code></pre>
+                            </div>
+                            <p class="text-xs text-zinc-500 leading-relaxed pl-2 border-l-2 border-white/10">Pole <code class="text-white font-bold">ip</code> z wartością <code class="text-white font-bold">"AUTO"</code> oznacza, że nasze API automatycznie wykryje adres IP serwera, z którego wysyłane jest żądanie. Możesz również podać konkretny adres IP, jeśli jest to wymagane.</p>
+                        </div>
+
+                        <div class="space-y-4">
+                            <h3 class="text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2">
+                                <span class="material-icons-outlined text-base text-primary-container">arrow_back</span> Ciało Odpowiedzi (Response)
+                            </h3>
+                            <div class="bg-black/40 border border-white/5 rounded-xl overflow-hidden">
+                                <div class="px-6 py-2 border-b border-white/5">
+                                    <p class="text-[10px] font-bold text-secondary uppercase">Sukces (Ważna licencja)</p>
+                                </div>
+                                <pre class="text-sm p-6"><code>{
+  <span class="text-white">"valid"</span>: <span class="text-secondary">true</span>
+}</code></pre>
+                            </div>
+                            <div class="bg-black/40 border border-white/5 rounded-xl overflow-hidden">
+                                <div class="px-6 py-2 border-b border-white/5">
+                                    <p class="text-[10px] font-bold text-danger uppercase">Błąd (np. Zły Klucz)</p>
+                                </div>
+                                <pre class="text-sm p-6"><code>{
+  <span class="text-white">"valid"</span>: <span class="text-danger">false</span>,
+  <span class="text-white">"reason"</span>: <span class="text-secondary">"Invalid license key."</span>
+}</code></pre>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <section class="space-y-4">
+            <section class="space-y-8">
                 <div class="flex items-center gap-4 text-white">
-                    <span class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center font-bold text-sm">4</span>
+                    <span class="w-8 h-8 rounded-lg bg-primary-container flex-shrink-0 flex items-center justify-center font-bold text-sm">3</span>
+                    <h2 class="text-2xl font-bold uppercase tracking-tight">Implementacja Java (Bukkit/Spigot)</h2>
+                </div>
+
+                <div class="space-y-4">
+                    <h4 class="text-sm font-bold text-zinc-300 uppercase tracking-widest flex items-center gap-2">
+                        <span class="material-icons-outlined text-base">dependency</span> Zależność GSON (pom.xml)
+                    </h4>
+                    <div class="bg-surface-container-low border border-white/5 rounded-2xl bg-black/30">
+                        <div class="p-6">
+                        <pre class="text-sm text-zinc-500"><code>&lt;dependency&gt;
+    &lt;groupId&gt;com.google.code.gson&lt;/groupId&gt;
+    &lt;artifactId&gt;gson&lt;/artifactId&gt;
+    &lt;version&gt;2.10.1&lt;/version&gt;
+    &lt;scope&gt;compile&lt;/scope&gt;
+&lt;/dependency&gt;</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h4 class="text-sm font-bold text-zinc-300 uppercase tracking-widest flex items-center gap-2">
+                       <span class="material-icons-outlined text-base">data_object</span> Klasa pomocnicza dla odpowiedzi (LicenseResponse.java)
+                    </h4>
+                    <p class="text-sm text-zinc-500">Utwórz prostą klasę lub rekord (Java 16+) do przechowywania danych z odpowiedzi API. Ułatwi to parsowanie JSON.</p>
+                    <div class="bg-surface-container-low border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
+                         <div class="bg-white/5 px-6 py-3 border-b border-white/5 flex items-center justify-between">
+                            <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Java Code</span>
+                        </div>
+                        <div class="p-6 bg-black/40 overflow-x-auto">
+                            <pre class="text-sm leading-7 text-zinc-300"><code><span class="text-zinc-500">// Rekord jest zwięzłą alternatywą dla klasy w tym przypadku</span>
+<span class="text-primary-container">public record</span> LicenseResponse(<span class="text-primary-container">boolean</span> valid, String reason) {}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h4 class="text-sm font-bold text-zinc-300 uppercase tracking-widest flex items-center gap-2">
+                        <span class="material-icons-outlined text-base">code</span> Główna klasa walidacji (LicenseManager.java)
+                    </h4>
+                     <div class="bg-surface-container-low border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
+                        <div class="bg-white/5 px-6 py-3 border-b border-white/5 flex items-center justify-between">
+                            <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Java 17+ Code</span>
+                        </div>
+                        <div class="p-6 bg-black/40 overflow-x-auto">
+                            <pre class="text-sm leading-7 text-zinc-300"><code><span class="text-zinc-500">import com.google.gson.Gson;</span>
+<span class="text-zinc-500">import org.bukkit.Bukkit;</span>
+<span class="text-zinc-500">import org.bukkit.plugin.java.JavaPlugin;</span>
+
+<span class="text-zinc-500">import java.net.URI;</span>
+<span class="text-zinc-500">import java.net.http.HttpClient;</span>
+<span class="text-zinc-500">import java.net.http.HttpRequest;</span>
+<span class="text-zinc-500">import java.net.http.HttpResponse;</span>
+<span class="text-zinc-500">import java.time.Duration;</span>
+<span class="text-zinc-500">import java.util.Map;</span>
+
+<span class="text-primary-container">public class</span> <span class="text-white">LicenseManager</span> {
+    <span class="text-primary-container">private static final String</span> API_URL = <span class="text-secondary">"https://licencje-api-u0sq.onrender.com/api/validate"</span>;
+    <span class="text-primary-container">private static final</span> Gson GSON = <span class="text-primary-container">new</span> Gson();
+    <span class="text-primary-container">private static final</span> HttpClient HTTP_CLIENT = HttpClient.newBuilder()
+            .version(HttpClient.Version.HTTP_2)
+            .connectTimeout(Duration.ofSeconds(10))
+            .build();
+
+    <span class="text-primary-container">public static boolean</span> <span class="text-white">validate</span>(JavaPlugin plugin, String licenseKey) {
+        <span class="text-zinc-500">// 1. Sprawdź, czy klucz nie jest pusty</span>
+        <span class="text-primary-container">if</span> (licenseKey == <span class="text-primary-container">null</span> || licenseKey.trim().isEmpty() || licenseKey.equals(<span class="text-secondary">"TWÓJ-UNIKALNY-KLUCZ"</span>)) {
+            plugin.getLogger().severe(<span class="text-secondary">"[Synthesized] Klucz licencyjny nie został ustawiony w config.yml!"</span>);
+            <span class="text-primary-container">return false;</span>
+        }
+        
+        plugin.getLogger().info(<span class="text-secondary">"[Synthesized] Trwa weryfikacja licencji..."</span>);
+        
+        <span class="text-zinc-500">// 2. Przygotuj ciało żądania w formacie JSON</span>
+        String requestBody = GSON.toJson(Map.of(<span class="text-secondary">"key"</span>, licenseKey, <span class="text-secondary">"ip"</span>, <span class="text-secondary">"AUTO"</span>));
+
+        <span class="text-primary-container">try</span> {
+            <span class="text-zinc-500">// 3. Zbuduj i wyślij żądanie POST</span>
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(API_URL))
+                    .header(<span class="text-secondary">"Content-Type"</span>, <span class="text-secondary">"application/json"</span>)
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+
+            HttpResponse&lt;String&gt; response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
+
+            <span class="text-zinc-500">// 4. Sparsuj odpowiedź JSON</span>
+            LicenseResponse licenseResponse = GSON.fromJson(response.body(), LicenseResponse.<span class="text-primary-container">class</span>);
+            
+            <span class="text-primary-container">if</span> (licenseResponse != <span class="text-primary-container">null</span> && licenseResponse.valid()) {
+                plugin.getLogger().info(<span class="text-secondary">"[Synthesized] Licencja została pomyślnie zweryfikowana. Dziękujemy!"</span>);
+                <span class="text-primary-container">return true;</span>
+            } <span class="text-primary-container">else</span> {
+                String reason = licenseResponse != <span class="text-primary-container">null</span> ? licenseResponse.reason() : <span class="text-secondary">"Nieznany błąd walidacji"</span>;
+                plugin.getLogger().severe(<span class="text-secondary">"[Synthesized] Weryfikacja licencji nie powiodła się: "</span> + reason);
+                <span class="text-primary-container">return false;</span>
+            }
+
+        } <span class="text-primary-container">catch</span> (Exception e) {
+            plugin.getLogger().severe(<span class="text-secondary">"[Synthesized] Nie można połączyć się z serwerem licencji. Sprawdź połączenie internetowe."</span>);
+            e.printStackTrace();
+            <span class="text-primary-container">return false;</span>
+        }
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h4 class="text-sm font-bold text-zinc-300 uppercase tracking-widest flex items-center gap-2">
+                        <span class="material-icons-outlined text-base">power</span> Użycie w klasie głównej pluginu (np. Main.java)
+                    </h4>
+                     <div class="bg-surface-container-low border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
+                        <div class="bg-white/5 px-6 py-3 border-b border-white/5 flex items-center justify-between">
+                            <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Java 17+ Code</span>
+                        </div>
+                        <div class="p-6 bg-black/40 overflow-x-auto">
+                            <pre class="text-sm leading-7 text-zinc-300"><code><span class="text-primary-container">public class</span> <span class="text-white">Main</span> <span class="text-primary-container">extends</span> <span class="text-white">JavaPlugin</span> {
+    
+    @Override
+    <span class="text-primary-container">public void</span> <span class="text-white">onEnable</span>() {
+        <span class="text-zinc-500">// Zapisz domyślny config.yml, jeśli nie istnieje</span>
+        this.saveDefaultConfig();
+        String licenseKey = this.getConfig().getString(<span class="text-secondary">"license-key"</span>);
+        
+        <span class="text-zinc-500">// Wykonaj walidację w nowym wątku, aby nie blokować głównego wątku serwera</span>
+        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+            <span class="text-primary-container">boolean</span> isValid = LicenseManager.validate(this, licenseKey);
+            
+            <span class="text-primary-container">if</span> (!isValid) {
+                <span class="text-zinc-500">// Jeśli licencja jest nieważna, wyłącz plugin</span>
+                Bukkit.getScheduler().runTask(this, () -> {
+                    getLogger().severe(<span class="text-secondary">"Plugin zostanie wyłączony z powodu problemu z licencją."</span>);
+                    Bukkit.getPluginManager().disablePlugin(this);
+                });
+                <span class="text-primary-container">return;</span>
+            }
+
+            <span class="text-zinc-500">// Tutaj umieść logikę ładowania pluginu (rejestrowanie komend, eventów itp.)</span>
+            <span class="text-zinc-500">// Wykonaj ją z powrotem w głównym wątku serwera!</span>
+            Bukkit.getScheduler().runTask(this, () -> {
+                <span class="text-zinc-500">// registerCommands();</span>
+                <span class="text-zinc-500">// registerListeners();</span>
+                getLogger().info(<span class="text-secondary">"Plugin został poprawnie załadowany."</span>);
+            });
+        });
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+             <section class="space-y-6">
+                <div class="flex items-center gap-4 text-white">
+                    <span class="w-8 h-8 rounded-lg bg-primary-container flex-shrink-0 flex items-center justify-center font-bold text-sm">4</span>
+                    <h2 class="text-2xl font-bold uppercase tracking-tight">Kody Odpowiedzi i Obsługa Błędów</h2>
+                </div>
+                <div class="bg-surface-container-low border border-white/5 p-6 rounded-2xl space-y-4 text-sm">
+                    <p>Zrozumienie kodów statusu HTTP pomoże w debugowaniu problemów. Twój plugin powinien odpowiednio reagować na różne scenariusze.</p>
+                    <ul class="space-y-4 mt-4">
+                        <li class="flex items-start gap-4">
+                            <span class="text-xs font-bold bg-secondary/20 text-secondary px-2 py-1 rounded">200 OK</span>
+                            <p class="flex-1 text-zinc-400">Żądanie przetworzone pomyślnie. Sprawdź pole <code class="text-white">valid</code> w odpowiedzi JSON, aby poznać ostateczny status licencji.</p>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <span class="text-xs font-bold bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded">400 Bad Request</span>
+                            <p class="flex-1 text-zinc-400">Serwer nie mógł zrozumieć żądania, prawdopodobnie z powodu błędnej składni JSON. Upewnij się, że wysyłane dane są poprawne.</p>
+                        </li>
+                         <li class="flex items-start gap-4">
+                            <span class="text-xs font-bold bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded">429 Too Many Requests</span>
+                            <p class="flex-1 text-zinc-400">Wysłano zbyt wiele żądań w krótkim czasie. Nasze API stosuje rate limiting, aby zapobiec nadużyciom. Plugin nie powinien ponawiać próby natychmiast.</p>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <span class="text-xs font-bold bg-danger/20 text-danger px-2 py-1 rounded">5xx Server Error</span>
+                            <p class="flex-1 text-zinc-400">Wystąpił problem po stronie naszego serwera API. W takim przypadku zalecamy traktowanie licencji jako tymczasowo nieważnej i ewentualne ponowienie próby po pewnym czasie.</p>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="space-y-6">
+                <div class="flex items-center gap-4 text-white">
+                    <span class="w-8 h-8 rounded-lg bg-primary-container flex-shrink-0 flex items-center justify-center font-bold text-sm">5</span>
                     <h2 class="text-2xl font-bold uppercase tracking-tight">Konfiguracja końcowa</h2>
                 </div>
                 <div class="bg-surface-container-low border border-white/5 p-6 rounded-2xl space-y-4">
-                    <p class="text-sm leading-relaxed">Dodaj poniższy wpis do <code class="text-white">config.yml</code> swojego pluginu:</p>
+                    <p class="text-sm leading-relaxed">Na koniec, upewnij się, że w pliku <code class="text-white">config.yml</code> Twojego pluginu znajduje się poniższy wpis, który zostanie wygenerowany przez <code class="text-white">saveDefaultConfig()</code>.</p>
                     <div class="bg-black/40 p-6 rounded-xl border border-white/5">
-                        <pre class="text-sm text-secondary"><code><span class="text-zinc-600"># Pobierz klucz z panelu użytkownika Synthesized Studio</span>
-<span class="text-primary">license-key</span>: <span class="text-white">"TWÓJ-UNIKALNY-KLUCZ"</span></code></pre>
+                        <pre class="text-sm"><code><span class="text-zinc-600"># Pobierz klucz z panelu użytkownika Synthesized Studio</span>
+<span class="text-primary-container">license-key</span>: <span class="text-white">'TWÓJ-UNIKALNY-KLUCZ'</span></code></pre>
                     </div>
                 </div>
             </section>
@@ -173,7 +349,7 @@
 
         <footer class="mt-20 pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
             <p class="text-[10px] font-black text-zinc-600 uppercase tracking-[0.3em]">
-                © 2026 Synthesized Studio
+                © 2024 Synthesized Studio
             </p>
             <div class="flex gap-6 text-[10px] font-bold uppercase tracking-widest text-zinc-500">
                 <a href="#" class="hover:text-primary-container transition-colors">API Status</a>
