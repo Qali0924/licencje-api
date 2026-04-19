@@ -66,21 +66,22 @@
                 </a>
             </div>
         </div>
-<div class="mb-6">
-    <div class="flex justify-between items-center mb-4">
-        <h3 class="text-sm font-bold text-gray-400 flex items-center gap-2">
-            <span class="material-icons-outlined text-sm">folder</span> KATEGORIE
-        </h3>
-        <button onclick="openCategoryModal()" class="text-sm font-bold text-gray-400 hover:text-white flex items-center gap-1 transition">
-            <span class="material-icons-outlined text-sm">create_new_folder</span> NOWA KATEGORIA
-        </button>
-    </div>
-    
-    <div id="categories-container" class="flex flex-wrap gap-3">
-        </div>
-</div>
+
         <div id="app-content" class="hidden space-y-10">
             
+            <div class="mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-sm font-bold text-gray-400 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">folder</span> KATEGORIE
+                    </h3>
+                    <button onclick="openCategoryModal()" class="text-sm font-bold text-gray-400 hover:text-white flex items-center gap-1 transition">
+                        <span class="material-symbols-outlined text-sm">create_new_folder</span> NOWA KATEGORIA
+                    </button>
+                </div>
+                <div id="categories-container" class="flex flex-wrap gap-3">
+                </div>
+            </div>
+
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
                     <h1 class="text-4xl font-black text-white tracking-tight uppercase">
@@ -166,11 +167,11 @@
                         <input type="text" id="pluginName" placeholder="np. DH-Core" required class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-primary-container/50">
                     </div>
                     <div class="mb-4">
-    <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase">Kategoria (Opcjonalna)</label>
-    <select id="license-category" class="w-full bg-[#111111] border border-white/10 rounded-lg p-3 text-white focus:border-white/30 focus:outline-none appearance-none cursor-pointer">
-        <option value="">Bez kategorii</option>
-        </select>
-</div>
+                        <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase">Kategoria (Opcjonalna)</label>
+                        <select id="license-category" class="w-full bg-[#111111] border border-white/10 rounded-lg p-3 text-white focus:border-white/30 focus:outline-none appearance-none cursor-pointer">
+                            <option value="">Bez kategorii</option>
+                        </select>
+                    </div>
                     <div class="space-y-2">
                         <label for="discordId" class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 ml-1">ID Discord (Opcjonalne)</label>
                         <input type="text" id="discordId" placeholder="np. 123456789" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-primary-container/50">
@@ -193,63 +194,66 @@
             </div>
         </div>
     </div>
-<div id="log-overlay" class="fixed inset-0 bg-background/95 backdrop-blur-md z-[110] flex items-center justify-center hidden p-6">
-    <div class="bg-surface-container-low border border-white/10 w-full max-w-xl rounded-3xl shadow-2xl overflow-hidden">
-        <div class="p-8">
+
+    <div id="log-overlay" class="fixed inset-0 bg-background/95 backdrop-blur-md z-[110] flex items-center justify-center hidden p-6">
+        <div class="bg-surface-container-low border border-white/10 w-full max-w-xl rounded-3xl shadow-2xl overflow-hidden">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-primary-container/10 flex items-center justify-center text-primary-container">
+                            <i class="bi bi-clock-history text-2xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-black text-white uppercase tracking-tight">Logi Aktywności</h2>
+                            <p class="text-zinc-500 text-xs">Historia weryfikacji dla tego pluginu</p>
+                        </div>
+                    </div>
+                    <button onclick="document.getElementById('log-overlay').classList.add('hidden')" class="text-zinc-500 hover:text-white text-3xl">&times;</button>
+                </div>
+                
+                <div id="log-list" class="space-y-3 max-h-[400px] overflow-y-auto pr-2">
+                    <div class="bg-white/5 p-4 rounded-xl flex items-center justify-between border border-white/5">
+                        <div class="flex items-center gap-3">
+                            <span class="px-2 py-1 bg-green-500/20 text-green-500 text-[10px] font-bold rounded">VERIFY OK</span>
+                            <span class="text-zinc-400 text-xs">15.04.2026, 21:04:58</span>
+                        </div>
+                        <span class="text-zinc-500 font-mono text-xs"><i class="bi bi-globe"></i> 127.0.0.1</span>
+                    </div>
+                </div>
+                
+                <button onclick="document.getElementById('log-overlay').classList.add('hidden')" class="w-full mt-6 py-4 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl transition-all uppercase text-xs tracking-widest">Zamknij</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="category-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[150]">
+        <div class="bg-[#111111] border border-white/10 rounded-2xl p-6 w-full max-w-md">
             <div class="flex justify-between items-center mb-6">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-primary-container/10 flex items-center justify-center text-primary-container">
-                        <i class="bi bi-clock-history text-2xl"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-black text-white uppercase tracking-tight">Logi Aktywności</h2>
-                        <p class="text-zinc-500 text-xs">Historia weryfikacji dla tego pluginu</p>
-                    </div>
-                </div>
-                <button onclick="document.getElementById('log-overlay').classList.add('hidden')" class="text-zinc-500 hover:text-white text-3xl">&times;</button>
+                <h2 class="text-xl font-black text-white flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary-container">create_new_folder</span> NOWA KATEGORIA
+                </h2>
+                <button onclick="closeCategoryModal()" class="text-gray-400 hover:text-white"><span class="material-symbols-outlined">close</span></button>
             </div>
+            <p class="text-sm text-gray-400 mb-4">Grupuj licencje według pluginu lub produktu.</p>
             
-            <div id="log-list" class="space-y-3 max-h-[400px] overflow-y-auto pr-2">
-                <div class="bg-white/5 p-4 rounded-xl flex items-center justify-between border border-white/5">
-                    <div class="flex items-center gap-3">
-                        <span class="px-2 py-1 bg-green-500/20 text-green-500 text-[10px] font-bold rounded">VERIFY OK</span>
-                        <span class="text-zinc-400 text-xs">15.04.2026, 21:04:58</span>
-                    </div>
-                    <span class="text-zinc-500 font-mono text-xs"><i class="bi bi-globe"></i> 127.0.0.1</span>
+            <form id="add-category-form">
+                <div class="mb-4">
+                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase">Nazwa kategorii</label>
+                    <input type="text" id="cat-name" placeholder="np. NyxStudio-Klany" class="w-full bg-black border border-white/20 rounded-lg p-3 text-white focus:border-primary-container focus:outline-none" required>
                 </div>
-            </div>
-            
-            <button onclick="document.getElementById('log-overlay').classList.add('hidden')" class="w-full mt-6 py-4 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl transition-all uppercase text-xs tracking-widest">Zamknij</button>
+                <div class="mb-6">
+                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase">Opis (Opcjonalny)</label>
+                    <input type="text" id="cat-desc" placeholder="np. Licencje do pluginu klanowego" class="w-full bg-black border border-white/10 rounded-lg p-3 text-white focus:border-white/30 focus:outline-none">
+                </div>
+                <div class="flex justify-end gap-4">
+                    <button type="button" onclick="closeCategoryModal()" class="text-sm text-gray-400 hover:text-white font-bold">Anuluj</button>
+                    <button type="submit" class="bg-gray-400 text-black px-6 py-2 rounded-lg text-sm font-black hover:bg-white transition">UTWÓRZ KATEGORIĘ</button>
+                </div>
+            </form>
         </div>
     </div>
-</div>
-<div id="category-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-    <div class="bg-[#111111] border border-white/10 rounded-2xl p-6 w-full max-w-md">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-xl font-black text-white flex items-center gap-2">
-                <span class="material-icons-outlined text-primary-container">create_new_folder</span> NOWA KATEGORIA
-            </h2>
-            <button onclick="closeCategoryModal()" class="text-gray-400 hover:text-white"><span class="material-icons-outlined">close</span></button>
-        </div>
-        <p class="text-sm text-gray-400 mb-4">Grupuj licencje według pluginu lub produktu.</p>
-        
-        <form id="add-category-form">
-            <div class="mb-4">
-                <label class="block text-xs font-bold text-gray-500 mb-2 uppercase">Nazwa kategorii</label>
-                <input type="text" id="cat-name" placeholder="np. NyxStudio-Klany" class="w-full bg-black border border-white/20 rounded-lg p-3 text-white focus:border-primary-container focus:outline-none" required>
-            </div>
-            <div class="mb-6">
-                <label class="block text-xs font-bold text-gray-500 mb-2 uppercase">Opis (Opcjonalny)</label>
-                <input type="text" id="cat-desc" placeholder="np. Licencje do pluginu klanowego" class="w-full bg-black border border-white/10 rounded-lg p-3 text-white focus:border-white/30 focus:outline-none">
-            </div>
-            <div class="flex justify-end gap-4">
-                <button type="button" onclick="closeCategoryModal()" class="text-sm text-gray-400 hover:text-white font-bold">Anuluj</button>
-                <button type="submit" class="bg-gray-400 text-black px-6 py-2 rounded-lg text-sm font-black hover:bg-white transition">UTWÓRZ KATEGORIĘ</button>
-            </div>
-        </form>
-    </div>
-</div>
-<div id="toast-container" class="fixed bottom-10 right-10 z-[200] space-y-4"></div>
+
+    <div id="toast-container" class="fixed bottom-10 right-10 z-[200] space-y-4"></div>
     <script src="script.js"></script>
 </body>
 </html>
