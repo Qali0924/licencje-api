@@ -10,6 +10,20 @@ const { createClient } = require('@supabase/supabase-js');
 // Inicjalizacja Supabase (Upewnij się, że masz te dane w pliku .env)
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
 
+// Funkcja generująca profesjonalne klucze ABCD-1234-EFGH-5678
+function generateKey(segments = 4, length = 4) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let key = [];
+    for (let i = 0; i < segments; i++) {
+        let segment = '';
+        for (let j = 0; j < length; j++) {
+            segment += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        key.push(segment);
+    }
+    return key.join('-');
+}
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
