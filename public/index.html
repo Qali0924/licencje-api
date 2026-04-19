@@ -156,7 +156,7 @@
                 <div class="flex justify-between items-start">
                     <div>
                         <h2 class="text-2xl font-black text-white uppercase">DODAJ LICENCJĘ</h2>
-                        <p class="text-zinc-500 text-sm">Dane zostaną zapisane w database.json.</p>
+                        <p class="text-zinc-500 text-sm">Uzupełnij dane, aby wygenerować klucz w database.json.</p>
                     </div>
                     <button onclick="document.getElementById('modal-overlay').classList.add('hidden')" class="text-zinc-500 hover:text-white text-3xl">&times;</button>
                 </div>
@@ -203,7 +203,7 @@
                     </h2>
                     <button onclick="document.getElementById('category-modal').classList.add('hidden')" class="text-zinc-500 hover:text-white text-3xl">&times;</button>
                 </div>
-                <p class="text-sm text-zinc-500">Dodaj nową grupę do database.json.</p>
+                <p class="text-sm text-zinc-500">Grupuj licencje według pluginu lub produktu.</p>
                 <form id="add-category-form" class="space-y-5">
                     <div class="space-y-2">
                         <label class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Nazwa kategorii</label>
@@ -211,7 +211,7 @@
                     </div>
                     <div class="space-y-2">
                         <label class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Opis (Opcjonalny)</label>
-                        <input type="text" id="cat-desc" placeholder="np. Opis grupy" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-primary-container/50">
+                        <input type="text" id="cat-desc" placeholder="np. Licencje do pluginu klanowego" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-primary-container/50">
                     </div>
                     <div class="flex gap-4 pt-4">
                         <button type="button" onclick="document.getElementById('category-modal').classList.add('hidden')" class="flex-1 py-3 text-zinc-400 font-bold hover:text-white transition-colors uppercase text-xs tracking-widest">Anuluj</button>
@@ -232,6 +232,7 @@
                         </div>
                         <div>
                             <h2 class="text-xl font-black text-white uppercase tracking-tight">Logi Aktywności</h2>
+                            <p class="text-zinc-500 text-xs">Historia weryfikacji dla tego pluginu</p>
                         </div>
                     </div>
                     <button onclick="document.getElementById('log-overlay').classList.add('hidden')" class="text-zinc-500 hover:text-white text-3xl">&times;</button>
@@ -243,11 +244,6 @@
     </div>
 
     <div id="toast-container" class="fixed bottom-10 right-10 z-[200] space-y-4"></div>
-    
-    <script>
-        // Awaryjne funkcje otwierania, jeśli script.js nie załaduje się poprawnie
-        window.closeCategoryModal = function() { document.getElementById('category-modal').classList.add('hidden'); };
-    </script>
     <script src="script.js"></script>
 </body>
 </html>
