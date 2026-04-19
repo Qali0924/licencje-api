@@ -155,16 +155,17 @@ app.post('/api/licenses', isLoggedIn, async (req, res) => {
         expiresAt.setDate(expiresAt.getDate() + parseInt(validityDays));
     }
 
-    const { data, error } = await supabase.from('licenses').insert([{
-        key: generateKey(), // <--- ZMIANA TUTAJ: Używamy nowej funkcji
-        plugin_name: pluginName,
-        discord_id: discordId || null,
-        ip_limit: parseInt(ipLimit) || 1,
-        expires_at: expiresAt,
-        owner_id: req.user.id,
-        is_active: true,
-        ips: []
-    }]).select().single();
+const { data, error } = await supabase.from('licenses').insert([{
+    key: generateKey(),
+    plugin_name: pluginName,
+    discord_id: discordId || null,
+    ip_limit: parseInt(ipLimit) || 1,
+    expires_at: expiresAt,
+    owner_id: req.user.id,
+    is_active: true,
+    ips: [],
+    category_id: categoryId || null // Zapisujemy kategorię, jeśli została wybrana
+}]).select().single();
 
     if (error) return res.status(500).json({ error: error.message });
     res.status(201).json(data);
