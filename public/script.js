@@ -309,7 +309,79 @@ licenseForm.addEventListener('submit', async (e) => {
         if (event.target == modalOverlay) modalOverlay.classList.add('hidden');
         if (event.target == logOverlay) logOverlay.classList.add('hidden');
     };
+let currentCategories = [];
+let selectedCategoryId = null; // null = "WSZYSTKIE"
 
+// Funkcje modala
+function openCategoryModal() { document.getElementById('category-modal').classList.remove('hidden'); }
+function closeCategoryModal() { document.getElementById('category-modal').classList.add('hidden'); }
+
+// Pobieranie i renderowanie kategorii
+async function loadCategories() {
+    const res = await fetch('/api/categories');
+    currentCategories = await res.json();
+    renderCategoriesUI();
+    updateCategoryDropdown();
+}
+
+// Renderowanie przycisków (chipów) na górze
+function renderCategoriesUI() {
+    const container = document.getElementById('categories-container');
+    container.innerHTML = '';
+
+    // Przycisk WSZYSTKIE
+    const allBtn = document.createElement('button');
+    allBtn.className = `px-4 py-2 rounded-lg border text-sm font-bold flex items-center gap-2 transition ${selectedCategoryId === null ? 'bg-white/10 border-white/20 text-white' : 'bg-transparent border-white/5 text-gray-500 hover:bg-white/5'}`;
+    allBtn.innerHTML = `WSZYSTKIE`;
+    allBtn.onclick = () => filterByCategory(null);
+    container.appendChild(allBtn);
+
+    // Dynamiczne kategorie
+    currentCategories.forEach(cat => {
+        const btn = document.createElement('button');
+        const isActive = selectedCategoryId === cat.id;
+        btn.className = `px-4 py-2 rounded-lg border text-sm font-bold flex items-center gap-2 transition ${isActive ? 'bg-primary-container/20 border-primary-container text-white' : 'bg-transparent border-white/5 text-gray-500 hover:bg-white/5'}`;
+        btn.innerHTML = `<span class="material-icons-outlined text-[16px]">folder</span> ${cat.name}`;
+        btn.onclick = () => filterByCategory(cat.id);
+        container.appendChild(btn);
+    });
+}
+
+// Aktualizacja dropdownu w modalu tworzenia licencji
+function updateCategoryDropdown() {
+    const select = document.getElementById('license-category');
+    select.innerHTML = '<option value="">Bez kategorii</option>';
+    currentCategories.forEach(cat => {
+        select.innerHTML += `<option value="${cat.id}">${cat.name}</option>`;
+    });
+}
+
+// Tworzenie nowej kategorii
+document.getElementById('add-category-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('cat-name').value;
+    const desc = document.getElementById('cat-desc').value;
+
+    const res = await fetch('/api/categories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, description: desc })
+    });
+
+    if(res.ok) {
+        closeCategoryModal();
+        document.getElementById('cat-name').value = '';
+        document.getElementById('cat-desc').value = '';
+        loadCategories(); // Odśwież listę
+    }
+});
+
+// Filtrowanie licencji po kliknięciu w kategorię
+function filterByCategory(categoryId) {
+    selectedCategoryId = categoryId;
+    renderCategoriesUI(); // Zaktualizuj kolory przycisków
+    loadLicenses(); // Odśwież listę licencji (musisz dodać filtrowanie w samej funkcji renderującej listę)
+}
     // Start
     if(addLicenseBtn) addLicenseBtn.onclick = () => modalOverlay.classList.remove('hidden');
     checkLoginStatus();
