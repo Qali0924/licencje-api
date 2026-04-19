@@ -117,7 +117,7 @@ app.get('/api/licenses', isLoggedIn, async (req, res) => {
     res.json(data);
 });
 
-// Tworzenie nowej licencji
+// Tworzenie nowej licencji - POPRAWIONE
 app.post('/api/licenses', isLoggedIn, async (req, res) => {
     const { pluginName, discordId, ipLimit, validityDays } = req.body;
 
@@ -128,13 +128,13 @@ app.post('/api/licenses', isLoggedIn, async (req, res) => {
     }
 
     const { data, error } = await supabase.from('licenses').insert([{
-        key: `DH-${uuidv4().split('-')[0].toUpperCase()}`,
+        key: generateKey(), // <--- ZMIANA TUTAJ: Używamy nowej funkcji
         plugin_name: pluginName,
         discord_id: discordId || null,
         ip_limit: parseInt(ipLimit) || 1,
         expires_at: expiresAt,
         owner_id: req.user.id,
-        is_active: true, // Nowa zawsze aktywna
+        is_active: true,
         ips: []
     }]).select().single();
 
