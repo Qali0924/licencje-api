@@ -6,7 +6,7 @@
     <title>Dokumentacja API - Synthesized Studio</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
     <script id="tailwind-config">
@@ -43,7 +43,7 @@
             <div class="flex items-center gap-3">
                 <span class="material-symbols-outlined text-primary-container text-3xl">terminal</span>
                 <div class="text-xl font-black italic tracking-tighter text-white uppercase">
-                    Synthesized <span class="text-primary-container">Docs</span>
+                    Synthesized <span class="text-primary-container">Studio</span>
                 </div>
             </div>
             <a href="/" class="flex items-center gap-2 bg-white/5 hover:bg-white/10 text-white px-5 py-2.5 rounded-xl font-bold text-xs transition-all border border-white/5">
@@ -63,7 +63,7 @@
                 Integracja <span class="text-primary-container">API</span>
             </h1>
             <p class="text-zinc-500 text-lg max-w-2xl">
-                Dowiedz się, jak w kilku prostych krokach zabezpieczyć swój plugin Minecraft korzystając z systemu <b>CLOUD MATH</b>.
+                Dowiedz się, jak w kilku prostych krokach zabezpieczyć swój plugin Minecraft korzystając z systemu <b>Synthesized Studio</b>.
             </p>
         </div>
 
@@ -93,7 +93,7 @@
                             </div>
                             <div class="bg-black/20 p-4 rounded-xl border border-white/5 md:col-span-2">
                                 <p class="text-[10px] font-black text-zinc-600 uppercase mb-1">URL Walidacji</p>
-                                <p class="text-white font-mono text-sm break-all">https://twoja-domena.pl/api/validate</p>
+                                <p class="text-white font-mono text-sm break-all">https://licencje-api-u0sq.onrender.com/api/validate</p>
                             </div>
                         </div>
                     </div>
@@ -141,8 +141,8 @@
                         </div>
                         <div class="p-6 bg-black/40 overflow-x-auto">
                             <pre class="text-sm leading-7 text-zinc-300"><code><span class="text-primary">public class</span> LicenseChecker {
-    <span class="text-zinc-500">// Zmień na adres swojej instancji</span>
-    <span class="text-primary">private static final String</span> URL = <span class="text-secondary">"https://twoja-domena.pl/api/validate"</span>;
+    <span class="text-zinc-500">// Adres Twojej instancji API</span>
+    <span class="text-primary">private static final String</span> URL = <span class="text-secondary">"https://licencje-api-u0sq.onrender.com/api/validate"</span>;
 
     <span class="text-primary">public void</span> validate(String key) {
         <span class="text-primary">new</span> Thread(() -> {
