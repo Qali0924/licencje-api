@@ -110,13 +110,19 @@ app.get('/api/categories', isLoggedIn, async (req, res) => {
         const { data, error } = await supabase
             .from('categories')
             .select('*')
-            .eq('owner_id', req.user.id)
-            .order('created_at', { ascending: true });
+            .eq('owner_id', req.user.id);
 
         if (error) {
-            console.error("Błąd Supabase (Categories):", error);
-            return res.status(500).json({ error: error.message, data: [] });
+            console.error("BŁĄD SUPABASE:", error.message); // To wypisze błąd w Twojej konsoli/terminalu
+            return res.status(500).json({ error: error.message });
         }
+
+        res.json(data || []);
+    } catch (err) {
+        console.error("BŁĄD KRYTYCZNY SERWERA:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
         
         // Zawsze zwracaj tablicę, nawet jeśli jest pusta
         res.json(data || []);
