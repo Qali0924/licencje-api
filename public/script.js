@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loginPrompt.classList.add('hidden');
         appContent.classList.remove('hidden');
         renderAuthUI(user);
+        await loadCategories(); // Pobierz kategorie zaraz po zalogowaniu
         await renderDashboard(user);
         await renderLicenseList();
     }
@@ -101,21 +102,26 @@ document.addEventListener('DOMContentLoaded', () => {
         return response.ok ? await response.json() : [];
     }
 
-    async function renderLicenseList() {
-        licenseList.innerHTML = `<div class="text-zinc-600 animate-pulse text-sm py-10 text-center">Synchronizacja z bazą danych...</div>`;
-        try {
-            const licenses = await fetchLicenses();
-            licenseList.innerHTML = '';
-            if (licenses.length === 0) {
-                licenseList.innerHTML = `<div class="bg-white/5 border border-dashed border-white/10 p-10 rounded-2xl text-center text-zinc-500 text-sm">Nie posiadasz jeszcze żadnych licencji.</div>`;
-                return;
-            }
-            licenses.forEach(renderSingleLicense);
-        } catch (e) {
-            licenseList.innerHTML = `<div class="text-red-500 text-sm text-center">Błąd krytyczny listy.</div>`;
+async function renderLicenseList() {
+    licenseList.innerHTML = `<div class="text-zinc-600 animate-pulse text-sm py-10 text-center">Synchronizacja z bazą danych...</div>`;
+    try {
+        let licenses = await fetchLicenses();
+        
+        // FILTROWANIE PO KATEGORII
+        if (selectedCategoryId !== null) {
+            licenses = licenses.filter(lic => lic.category_id === selectedCategoryId);
         }
-    }
 
+        licenseList.innerHTML = '';
+        if (licenses.length === 0) {
+            licenseList.innerHTML = `<div class="bg-white/5 border border-dashed border-white/10 p-10 rounded-2xl text-center text-zinc-500 text-sm">Brak licencji w tej kategorii.</div>`;
+            return;
+        }
+        licenses.forEach(renderSingleLicense);
+    } catch (e) {
+        licenseList.innerHTML = `<div class="text-red-500 text-sm text-center">Błąd krytyczny listy.</div>`;
+    }
+}
     function renderSingleLicense(license) {
         const isActive = license.is_active !== false;
         const expiration = license.expires_at ? new Date(license.expires_at).toLocaleDateString('pl-PL') : 'NIGDY';
@@ -249,11 +255,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Formularz dodawania
+// Formularz dodawania licencji - ZAKTUALIZOWANY
 licenseForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    // Pobieramy przycisk, żeby dać feedback użytkownikowi
     const submitBtn = e.target.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerText;
     submitBtn.innerText = "WYSYŁANIE...";
@@ -264,6 +269,7 @@ licenseForm.addEventListener('submit', async (e) => {
         discordId: document.getElementById('discordId').value,
         ipLimit: document.getElementById('ipLimit').value,
         validityDays: document.getElementById('validityDays').value,
+        categoryId: document.getElementById('license-category').value // DODANO TO
     };
 
     try {
@@ -273,19 +279,16 @@ licenseForm.addEventListener('submit', async (e) => {
             body: JSON.stringify(data)
         });
 
-        const result = await res.json();
-
         if (res.ok) {
             showToast('Dodano nową licencję!', 'success');
             licenseForm.reset();
             modalOverlay.classList.add('hidden');
-            // WAŻNE: Odświeżamy listę i status zalogowania
-            await checkLoginStatus(); 
+            await renderLicenseList(); // Odśwież listę
         } else {
+            const result = await res.json();
             showToast('Błąd: ' + (result.error || 'Serwer odrzucił dane'), 'error');
         }
     } catch (err) {
-        console.error("Błąd wysyłania:", err);
         showToast('Błąd połączenia z serwerem', 'error');
     } finally {
         submitBtn.innerText = originalText;
