@@ -322,16 +322,24 @@ function closeCategoryModal() { document.getElementById('category-modal').classL
 async function loadCategories() {
     try {
         const res = await fetch('/api/categories');
-        const result = await res.json();
         
-        // Zabezpieczenie: jeśli result to nie tablica, weź pustą tablicę
-        currentCategories = Array.isArray(result) ? result : (result.data || []);
+        // Jeśli serwer zwróci błąd (np. 500), udajemy, że mamy pustą listę
+        if (!res.ok) {
+            console.warn("Serwer zwrócił błąd kategorii. Ustawiam pustą listę.");
+            currentCategories = [];
+            renderCategoriesUI();
+            updateCategoryDropdown();
+            return;
+        }
+
+        const data = await res.json();
+        currentCategories = Array.isArray(data) ? data : [];
         
         renderCategoriesUI();
         updateCategoryDropdown();
     } catch (err) {
-        console.error("Błąd ładowania kategorii:", err);
-        currentCategories = []; // Reset do pustej listy w razie błędu
+        console.error("Błąd sieci/fetch kategorii:", err);
+        currentCategories = [];
     }
 }
 
