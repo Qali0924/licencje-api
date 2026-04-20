@@ -146,8 +146,10 @@ app.get('/api/licenses', isLoggedIn, async (req, res) => {
 });
 
 // Tworzenie nowej licencji - POPRAWIONE
+// Tworzenie nowej licencji - POPRAWIONE
 app.post('/api/licenses', isLoggedIn, async (req, res) => {
-    const { pluginName, discordId, ipLimit, validityDays } = req.body;
+    // DODANO: categoryId w destrukturyzacji
+    const { pluginName, discordId, ipLimit, validityDays, categoryId } = req.body;
 
     let expiresAt = null;
     if (validityDays && parseInt(validityDays) > 0) {
@@ -155,17 +157,17 @@ app.post('/api/licenses', isLoggedIn, async (req, res) => {
         expiresAt.setDate(expiresAt.getDate() + parseInt(validityDays));
     }
 
-const { data, error } = await supabase.from('licenses').insert([{
-    key: generateKey(),
-    plugin_name: pluginName,
-    discord_id: discordId || null,
-    ip_limit: parseInt(ipLimit) || 1,
-    expires_at: expiresAt,
-    owner_id: req.user.id,
-    is_active: true,
-    ips: [],
-    category_id: categoryId || null // Zapisujemy kategorię, jeśli została wybrana
-}]).select().single();
+    const { data, error } = await supabase.from('licenses').insert([{
+        key: generateKey(),
+        plugin_name: pluginName,
+        discord_id: discordId || null,
+        ip_limit: parseInt(ipLimit) || 1,
+        expires_at: expiresAt,
+        owner_id: req.user.id,
+        is_active: true,
+        ips: [],
+        category_id: categoryId || null // Teraz categoryId będzie poprawne
+    }]).select().single();
 
     if (error) return res.status(500).json({ error: error.message });
     res.status(201).json(data);
