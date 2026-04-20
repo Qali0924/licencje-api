@@ -319,17 +319,26 @@ let selectedCategoryId = null; // null = "WSZYSTKIE"
 function openCategoryModal() { document.getElementById('category-modal').classList.remove('hidden'); }
 function closeCategoryModal() { document.getElementById('category-modal').classList.add('hidden'); }
 
-// Pobieranie i renderowanie kategorii
 async function loadCategories() {
-    const res = await fetch('/api/categories');
-    currentCategories = await res.json();
-    renderCategoriesUI();
-    updateCategoryDropdown();
+    try {
+        const res = await fetch('/api/categories');
+        const result = await res.json();
+        
+        // Zabezpieczenie: jeśli result to nie tablica, weź pustą tablicę
+        currentCategories = Array.isArray(result) ? result : (result.data || []);
+        
+        renderCategoriesUI();
+        updateCategoryDropdown();
+    } catch (err) {
+        console.error("Błąd ładowania kategorii:", err);
+        currentCategories = []; // Reset do pustej listy w razie błędu
+    }
 }
 
-// Renderowanie przycisków (chipów) na górze
 function renderCategoriesUI() {
     const container = document.getElementById('categories-container');
+    if (!container) return; // Zabezpieczenie przed brakiem elementu
+    
     container.innerHTML = '';
 
     // Przycisk WSZYSTKIE
@@ -339,15 +348,17 @@ function renderCategoriesUI() {
     allBtn.onclick = () => filterByCategory(null);
     container.appendChild(allBtn);
 
-    // Dynamiczne kategorie
-    currentCategories.forEach(cat => {
-        const btn = document.createElement('button');
-        const isActive = selectedCategoryId === cat.id;
-        btn.className = `px-4 py-2 rounded-lg border text-sm font-bold flex items-center gap-2 transition ${isActive ? 'bg-primary-container/20 border-primary-container text-white' : 'bg-transparent border-white/5 text-gray-500 hover:bg-white/5'}`;
-        btn.innerHTML = `<span class="material-icons-outlined text-[16px]">folder</span> ${cat.name}`;
-        btn.onclick = () => filterByCategory(cat.id);
-        container.appendChild(btn);
-    });
+    // Dynamiczne kategorie - TERAZ BEZPIECZNE
+    if (Array.isArray(currentCategories)) {
+        currentCategories.forEach(cat => {
+            const btn = document.createElement('button');
+            const isActive = selectedCategoryId === cat.id;
+            btn.className = `px-4 py-2 rounded-lg border text-sm font-bold flex items-center gap-2 transition ${isActive ? 'bg-primary-container/20 border-primary-container text-white' : 'bg-transparent border-white/5 text-gray-500 hover:bg-white/5'}`;
+            btn.innerHTML = `<span class="material-symbols-outlined text-[16px]">folder</span> ${cat.name}`;
+            btn.onclick = () => filterByCategory(cat.id);
+            container.appendChild(btn);
+        });
+    }
 }
 
 // Aktualizacja dropdownu w modalu tworzenia licencji
