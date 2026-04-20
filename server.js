@@ -106,14 +106,24 @@ app.get('/api/user', async (req, res) => {
 
 // Pobieranie kategorii
 app.get('/api/categories', isLoggedIn, async (req, res) => {
-    const { data, error } = await supabase
-        .from('categories')
-        .select('*')
-        .eq('owner_id', req.user.id)
-        .order('created_at', { ascending: true });
+    try {
+        const { data, error } = await supabase
+            .from('categories')
+            .select('*')
+            .eq('owner_id', req.user.id)
+            .order('created_at', { ascending: true });
 
-    if (error) return res.status(500).json({ error: error.message });
-    res.json(data);
+        if (error) {
+            console.error("Błąd Supabase (Categories):", error);
+            return res.status(500).json({ error: error.message, data: [] });
+        }
+        
+        // Zawsze zwracaj tablicę, nawet jeśli jest pusta
+        res.json(data || []);
+    } catch (err) {
+        console.error("Błąd serwera:", err);
+        res.status(500).json({ error: "Błąd wewnętrzny serwera", data: [] });
+    }
 });
 
 // Tworzenie nowej kategorii
