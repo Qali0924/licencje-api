@@ -113,7 +113,7 @@ app.get('/api/categories', isLoggedIn, async (req, res) => {
             .eq('owner_id', req.user.id);
 
         if (error) {
-            console.error("BŁĄD SUPABASE:", error.message); // To wypisze błąd w Twojej konsoli/terminalu
+            console.error("BŁĄD SUPABASE:", error.message);
             return res.status(500).json({ error: error.message });
         }
 
@@ -123,29 +123,30 @@ app.get('/api/categories', isLoggedIn, async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
-        
-        // Zawsze zwracaj tablicę, nawet jeśli jest pusta
-        res.json(data || []);
-    } catch (err) {
-        console.error("Błąd serwera:", err);
-        res.status(500).json({ error: "Błąd wewnętrzny serwera", data: [] });
-    }
-});
 
 // Tworzenie nowej kategorii
 app.post('/api/categories', isLoggedIn, async (req, res) => {
-    const { name, description } = req.body;
-    
-    if (!name) return res.status(400).json({ error: 'Nazwa kategorii jest wymagana.' });
+    try {
+        const { name, description } = req.body;
+        
+        if (!name) return res.status(400).json({ error: 'Nazwa kategorii jest wymagana.' });
 
-    const { data, error } = await supabase.from('categories').insert([{
-        owner_id: req.user.id,
-        name: name,
-        description: description || null
-    }]).select().single();
+        const { data, error } = await supabase
+            .from('categories')
+            .insert([{
+                owner_id: req.user.id,
+                name: name,
+                description: description || null
+            }])
+            .select()
+            .single();
 
-    if (error) return res.status(500).json({ error: error.message });
-    res.status(201).json(data);
+        if (error) return res.status(500).json({ error: error.message });
+        res.status(201).json(data);
+    } catch (err) {
+        console.error("BŁĄD PRZY TWORZENIU KATEGORII:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
 });
 // --- API: ZARZĄDZANIE LICENCJAMI ---
 
